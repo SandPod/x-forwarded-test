@@ -6,6 +6,10 @@ A tiny [Serverpod](https://serverpod.dev) + Flutter app that answers one questio
 
 The server "bounces" every request it receives back to the caller, reporting the `X-Forwarded-For` header, related forwarding headers, the address of the machine that opened the TCP connection, and every other header. The Flutter app shows the result in plain language.
 
+<p align="center">
+  <img src="docs/screenshot.png" alt="The app showing a forwarded IP, the path the request took, and related headers" width="600">
+</p>
+
 **Live demo on Serverpod Cloud:** https://x-forwarded-test.serverpod.space ([raw JSON](https://x-forwarded-test.serverpod.space/echo))
 
 ## What it shows
@@ -23,9 +27,9 @@ curl https://x-forwarded-test.serverpod.space/echo
 
 ```json
 {
-  "xForwardedFor": "203.0.113.7,34.117.25.54,35.191.144.132",
-  "remoteAddress": "[::ffff:ac6:8605]:35398",
-  "headers": { "via": "1.1 google", "x-forwarded-proto": "http", "...": "..." }
+  "xForwardedFor": "203.0.113.7, 198.51.100.24",
+  "remoteAddress": "[::ffff:10.0.0.5]:35398",
+  "headers": { "x-forwarded-for": "203.0.113.7, 198.51.100.24", "...": "..." }
 }
 ```
 
@@ -34,18 +38,6 @@ Send your own header to see how the proxy treats it:
 ```sh
 curl -H 'X-Forwarded-For: 1.2.3.4' https://x-forwarded-test.serverpod.space/echo
 ```
-
-## What we found on Serverpod Cloud
-
-| Question | Answer |
-| --- | --- |
-| Is `X-Forwarded-For` preserved? | **Yes.** Your public IP is in it, followed by Google Cloud load balancer and proxy addresses. |
-| Can a client spoof it? | **Partly.** A value sent by the client is kept, and the real addresses are appended after it. Don't trust the first entry. Your real IP is the one the load balancer added: currently the **third entry from the right**. |
-| Is `X-Forwarded-Proto` reliable? | **No.** It reads `http` even for HTTPS requests, because TLS ends at the load balancer. |
-| `Forwarded` / `X-Real-IP`? | Not set. |
-| TCP peer address? | An internal address, not the client. |
-
-These results were measured in October 2026 and may change; run the app to see the current behaviour.
 
 ## How it works
 

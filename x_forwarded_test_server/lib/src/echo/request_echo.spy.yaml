@@ -1,0 +1,15 @@
+### What the server saw of an incoming request, as bounced back to the caller.
+class: RequestEcho
+fields:
+  ### Raw value of the `X-Forwarded-For` header, or null if it was absent.
+  xForwardedFor: String?
+  ### Raw value of the `Forwarded` header (RFC 7239), or null if it was absent.
+  forwarded: String?
+  ### Raw value of the `X-Real-IP` header, or null if it was absent.
+  xRealIp: String?
+  ### The peer address of the TCP connection, as seen by the server.
+  remoteAddress: String
+  ### All request headers, with multiple values joined by ", ".
+  headers: Map<String, String>
+  ### When the server handled the request.
+  timestamp: DateTime

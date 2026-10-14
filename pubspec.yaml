@@ -1,0 +1,11 @@
+name: _
+publish_to: none
+
+environment:
+  sdk: '^3.12.2'
+
+workspace:
+  - x_forwarded_test_client
+  - x_forwarded_test_server
+  - x_forwarded_test_flutter
+
